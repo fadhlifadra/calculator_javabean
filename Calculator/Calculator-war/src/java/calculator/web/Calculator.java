@@ -5,14 +5,8 @@
  */
 package calculator.web;
 
-import calculator.ejb.CalculatorBeanLocal;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,8 +21,6 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "Calculator", urlPatterns = {"/Calculator"})
 public class Calculator extends HttpServlet {
 
-    CalculatorBeanLocal calculatorBean = lookupCalculatorBeanLocal();
-
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -40,48 +32,52 @@ public class Calculator extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
         try {
-        double total;
-        int count = 0;
-        
-        if(!request.getParameter("value").isEmpty()) {
-            total = calculatorBean.add(Double.parseDouble(request.getParameter("value")));
-        }
-        else {
-            total = calculatorBean.getTotal();
-        }
-        if(calculatorBean.getCount() != 0) {
-            count = calculatorBean.getCount();
-        }
-        if (request.getParameter("Add") != null) {
-        total = calculatorBean.add(Double.parseDouble(request.getParameter("value")));
-        }
-        if (request.getParameter("Sub") != null) {
-        total = calculatorBean.sub(Double.parseDouble(request.getParameter("value")));
-        }
-        if (request.getParameter("Div") != null) {
-        total = calculatorBean.div(Double.parseDouble(request.getParameter("value")));
-        }
-        if (request.getParameter("Mul") != null) {
-        total = calculatorBean.multiple(Double.parseDouble(request.getParameter("value")));
-        }
-        
-        PrintWriter out = response.getWriter();
+            double total;
+            double plus;
+            double minus;
+            double mul;
+            double div;
+            int count = 0;
+            
+            request.setAttribute("display", 4);
+            if(!request.getParameter("value").isEmpty()) {
+                total = calculatorBean.add(Double.parseDouble(request.getParameter("value")));
+            }
+            else {
+                total = calculatorBean.getTotal();
+            }
+            
+            if(calculatorBean.getCount() != 0) {
+                count = calculatorBean.getCount();
+            }
+            if (request.getParameter("plus") != null) {
+                plus = calculatorBean.getPlus();
+            }
+            if (request.getParameter("minus") != null) {
+                minus = calculatorBean.getMinus();
+            }
+            if (request.getParameter("times") != null) {
+                mul = calculatorBean.getMul();
+            }
+            if (request.getParameter("div") != null) {
+                div = calculatorBean.getDiv();
+            }
+            
             RequestDispatcher rd = getServletContext().getRequestDispatcher("/index.html");
-            rd.include(request, response);
-        }
-        
-        catch (IOException | NumberFormatException | ServletException ex) {
-            PrintWriter out = response.getWriter();
-            out.println("Error: " + ex.getMessage() + "<br />Silahkan isi field dengan angka");
-            RequestDispatcher rd = getServletContext().getRequestDispatcher("/index.html");
-            rd.include(request, response);
-        }
-        finally {
-            PrintWriter out = response.getWriter();
-            out.close();
-        }
+                rd.include(request, response);
+            }
+            catch (IOException | NumberFormatException | ServletException ex) {
+                PrintWriter out = response.getWriter();
+                out.println("Error: " + ex.getMessage() + "<br />Silahkan isi field dengan angka");
+                RequestDispatcher rd = getServletContext().getRequestDispatcher("/index.html");
+                rd.include(request, response);
+            }
+            finally {
+                PrintWriter out = response.getWriter();
+                out.close();
+            }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -122,15 +118,5 @@ public class Calculator extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
-    private CalculatorBeanLocal lookupCalculatorBeanLocal() {
-        try {
-            Context c = new InitialContext();
-            return (CalculatorBeanLocal) c.lookup("java:global/Calculator/Calculator-ejb/CalculatorBean!calculator.ejb.CalculatorBeanLocal");
-        } catch (NamingException ne) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
-            throw new RuntimeException(ne);
-        }
-    }
 
 }

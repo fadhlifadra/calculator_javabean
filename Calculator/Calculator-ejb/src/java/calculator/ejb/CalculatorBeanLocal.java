@@ -14,10 +14,11 @@ import javax.ejb.Local;
 @Local
 public interface CalculatorBeanLocal {
 
-    public double sub(double value);
     public double add(double value);
-    public double multiple(double value);
-    public double div(double value);
     public double getTotal();
     int getCount();
+    double getPlus();
+    double getMinus();
+    double getMul();
+    double getDiv();
 }
