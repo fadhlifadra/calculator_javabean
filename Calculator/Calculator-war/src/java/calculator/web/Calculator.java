@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -40,17 +41,46 @@ public class Calculator extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet Calculator</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet Calculator at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        try {
+        double total;
+        int count = 0;
+        
+        if(!request.getParameter("value").isEmpty()) {
+            total = calculatorBean.add(Double.parseDouble(request.getParameter("value")));
+        }
+        else {
+            total = calculatorBean.getTotal();
+        }
+        if(calculatorBean.getCount() != 0) {
+            count = calculatorBean.getCount();
+        }
+        if (request.getParameter("Add") != null) {
+        total = calculatorBean.add(Double.parseDouble(request.getParameter("value")));
+        }
+        if (request.getParameter("Sub") != null) {
+        total = calculatorBean.sub(Double.parseDouble(request.getParameter("value")));
+        }
+        if (request.getParameter("Div") != null) {
+        total = calculatorBean.div(Double.parseDouble(request.getParameter("value")));
+        }
+        if (request.getParameter("Mul") != null) {
+        total = calculatorBean.multiple(Double.parseDouble(request.getParameter("value")));
+        }
+        
+        PrintWriter out = response.getWriter();
+            RequestDispatcher rd = getServletContext().getRequestDispatcher("/index.html");
+            rd.include(request, response);
+        }
+        
+        catch (IOException | NumberFormatException | ServletException ex) {
+            PrintWriter out = response.getWriter();
+            out.println("Error: " + ex.getMessage() + "<br />Silahkan isi field dengan angka");
+            RequestDispatcher rd = getServletContext().getRequestDispatcher("/index.html");
+            rd.include(request, response);
+        }
+        finally {
+            PrintWriter out = response.getWriter();
+            out.close();
         }
     }
 

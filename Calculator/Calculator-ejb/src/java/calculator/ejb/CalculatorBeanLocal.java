@@ -19,4 +19,5 @@ public interface CalculatorBeanLocal {
     public double multiple(double value);
     public double div(double value);
     public double getTotal();
+    int getCount();
 }

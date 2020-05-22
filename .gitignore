@@ -1,2 +1,7 @@
 /Calculator/Calculator-ejb/nbproject/private/
 /Calculator/nbproject/private/
+/Calculator/Calculator-ejb/build/
+/Calculator/Calculator-ejb/dist/
+/Calculator/build/
+/Calculator/Calculator-war/dist/
+/Calculator/dist/

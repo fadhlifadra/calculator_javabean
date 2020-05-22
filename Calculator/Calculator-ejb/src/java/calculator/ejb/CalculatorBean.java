@@ -49,6 +49,10 @@ public class CalculatorBean implements CalculatorBeanLocal {
     public double getTotal() {
         return total;
     }
-    
+
+    @Override
+    public int getCount() {
+        return count;
+    }
     
 }
