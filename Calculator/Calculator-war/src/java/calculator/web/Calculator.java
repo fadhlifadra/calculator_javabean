@@ -40,29 +40,29 @@ public class Calculator extends HttpServlet {
             double div;
             int count = 0;
             
-            request.setAttribute("display", 4);
-            if(!request.getParameter("value").isEmpty()) {
-                total = calculatorBean.add(Double.parseDouble(request.getParameter("value")));
-            }
-            else {
-                total = calculatorBean.getTotal();
-            }
-            
-            if(calculatorBean.getCount() != 0) {
-                count = calculatorBean.getCount();
-            }
-            if (request.getParameter("plus") != null) {
-                plus = calculatorBean.getPlus();
-            }
-            if (request.getParameter("minus") != null) {
-                minus = calculatorBean.getMinus();
-            }
-            if (request.getParameter("times") != null) {
-                mul = calculatorBean.getMul();
-            }
-            if (request.getParameter("div") != null) {
-                div = calculatorBean.getDiv();
-            }
+//            request.setAttribute("display", 4);
+//            if(!request.getParameter("value").isEmpty()) {
+//                total = calculatorBean.add(Double.parseDouble(request.getParameter("value")));
+//            }
+//            else {
+//                total = calculatorBean.getTotal();
+//            }
+//            
+//            if(calculatorBean.getCount() != 0) {
+//                count = calculatorBean.getCount();
+//            }
+//            if (request.getParameter("plus") != null) {
+//                plus = calculatorBean.getPlus();
+//            }
+//            if (request.getParameter("minus") != null) {
+//                minus = calculatorBean.getMinus();
+//            }
+//            if (request.getParameter("times") != null) {
+//                mul = calculatorBean.getMul();
+//            }
+//            if (request.getParameter("div") != null) {
+//                div = calculatorBean.getDiv();
+//            }
             
             RequestDispatcher rd = getServletContext().getRequestDispatcher("/index.html");
                 rd.include(request, response);
